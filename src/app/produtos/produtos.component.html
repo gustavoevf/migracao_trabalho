@@ -1,0 +1,216 @@
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <app-sidebar></app-sidebar>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+        <app-navbar></app-navbar>
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <h1 class="h3 mb-2 text-gray-800">Produtos</h1>
+                <p class="mb-4">Cadastro de Produtos</p>
+
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <a href="#" data-toggle="modal" data-target="#cadastrarProdutoModal"
+                            class="btn btn-success btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <span class="text">Novo Produto</span>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="tableProdutos" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Categoria</th>
+                                        <th>Preço</th>
+                                        <th>Descrição</th>
+                                        <th>Tags</th>
+                                        <th>Quantidade</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let produto of produtos">
+                                        <td>{{produto.nome}}</td>
+                                        <td>{{categorias[produto.idCategoria].nome}}</td>
+                                        <td>{{produto.preco}}</td>
+                                        <td>{{produto.descricao}}</td>
+                                        <td><span *ngFor="let tag of produto.tags" class="badge badge-primary"></span></td>
+                                        <td>{{produto.quantidade}}</td>
+                                        <td>
+                                            <div>
+                                                <a href="#" class="btn btn-warning btn-circle btn-sm"
+                                                    data-toggle="modal" data-target="#editarUsuarioModal">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-danger btn-circle btn-sm" data-toggle="modal"
+                                                    data-target="#excluirProdutoModal">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Controle de Estoque 2022</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<div class="modal fade" id="cadastrarProdutoModal" tabindex="-1" role="dialog"
+    aria-labelledby="cadastrarProdutoModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastrar Produto</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="d-flex flex-column flex-wrap" id="formCadastrarProduto" 
+                [formGroup]="formInclusaoProduto" (ngSubmit)="onSubmitCreate()">
+                    <div class="mt-3">
+                        <label for="nome" class="font-weight-bold">Nome</label>
+                        <input id="nome" class="form-control" placeholder="Nome" name="nome" 
+                        required autofocus formControlName="nome">
+                    </div>
+                    <div class="mt-3">
+                        <label for="inputEmail" class="font-weight-bold">Categoria</label>
+                        <select name="idCategoria" class="form-control" id="selectCategorias" formControlName="categoria">
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label for="preco" class="font-weight-bold">Preço</label>
+                        <input id="preco" class="form-control" placeholder="Preço" name="preco" required
+                        autofocus formControlName="preco">
+                    </div>
+                    <div class="mt-3">
+                        <label for="tags" class="font-weight-bold">Tags</label>
+                        <select name="tags" class="form-control" id="selectTags" multiple="multiple" formControlName="tags">
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label for="quantidade" class="font-weight-bold">Quantidade</label>
+                        <input id="quantidade" type="number" class="form-control" placeholder="0" name="quantidade" required
+                            autofocus formControlName="quantidade">
+                    </div>
+                    <div class="mt-3">
+                        <label for="descricao" class="font-weight-bold">Descrição</label>
+                        <textarea id="descricao" name="descricao" class="form-control" placeholder=""
+                            required formControlName="descricao"></textarea>
+                    </div>
+                    <div class="d-flex d-flex align-items-center justify-content-end w-100 mt-2">
+                        <button class="btn btn-secondary mr-1" type="button" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editarProdutoModal" tabindex="-1" role="dialog" aria-labelledby="editarProdutoModal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Produto</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form [formGroup]="formEdicaoProduto" (ngSubmit)="onSubmitEdit()">
+                <div class="modal-body">
+                    <div class="m-3">
+                        <div class="mt-3">
+                            <label for="nome" class="font-weight-bold">Nome</label>
+                            <input id="nome" class="form-control" placeholder="Nome" name="nome" required autofocus>
+                        </div>
+                        <div class="mt-3">
+                            <label for="inputEmail" class="font-weight-bold">Categoria</label>
+                            <select class="form-control" id="categoria">
+                                <option *ngFor="let categoria of categorias" [value]="categoria.id">{{categoria.nome}}</option>
+                            </select>
+                        </div>
+                        <div class="mt-3">
+                            <label for="preco" class="font-weight-bold">Preço</label>
+                            <input id="preco" class="form-control" placeholder="Preço" name="preco" required
+                                autofocus>
+                        </div>
+                        <div class="mt-3">
+                            <label for="descricao" class="font-weight-bold">Descrição</label>
+                            <textarea id="descricao" name="descricao" class="form-control" placeholder="Senha"
+                                required></textarea>
+                        </div>
+                        <div class="d-flex d-flex align-items-center justify-content-center w-100 mt-2">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="excluirUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="excluirUsuarioModal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Excluir Produto</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Você têm certeza que deseja excluir o Produto <b>Teste</b>?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <a class="btn btn-danger" href="#">Excluir</a>
+            </div>
+        </div>
+    </div>
+</div>

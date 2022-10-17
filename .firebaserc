@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "estoque-hague": {
+      "hosting": {
+        "hague-estoque": [
+          "estoque-hague"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "estoque-hague"
+  }
+}

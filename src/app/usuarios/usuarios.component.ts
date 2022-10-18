@@ -16,6 +16,7 @@ export class UsuariosComponent implements OnInit {
     celular: '',
     senha: '',
   });
+
   formEdicaoUsuario = this.formBuilder.group({
     nome: '',
     email: '',
@@ -48,7 +49,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   onSubmitCreate(): void {
-    this.firebaseService.post(this.formInclusaoUsuario.value, 'usuarios').then(() => {
+    this.firebaseService.post({id: this.usuarioSelecionado.id, ...this.formInclusaoUsuario.value}, 'usuarios').then(() => {
 
       (<any>$('#cadastrarUsuarioModal')).modal('hide');
 
@@ -67,7 +68,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   onSubmitEdit(): void {
-    this.firebaseService.update(this.formEdicaoUsuario.value, 'usuarios').then(() => {
+    this.firebaseService.update(this.formEdicaoUsuario.value, this.usuarioSelecionado.id, 'usuarios').then(() => {
 
       (<any>$('#editarUsuarioModal')).modal('hide');
 
@@ -78,6 +79,7 @@ export class UsuariosComponent implements OnInit {
       this.formEdicaoUsuario.reset();
       this.obterUsuarios();
     }).catch((error) => {
+      console.log(error);
       Swal.fire({
         icon: 'error',
         title: 'Erro ao editar usuário!'
@@ -87,6 +89,8 @@ export class UsuariosComponent implements OnInit {
 
   selecionarUsuario(usuario: any) {
     this.usuarioSelecionado = usuario;
+    const clone = (({ id, ...o }) => o)(usuario);
+    this.formEdicaoUsuario.setValue(clone);
   }
 
   excluirUsuario() {

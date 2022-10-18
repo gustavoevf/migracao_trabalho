@@ -84,7 +84,7 @@ export class ProdutosComponent implements OnInit {
   }
 
   onSubmitEdit(): void {
-    this.firebaseService.update(this.formEdicaoProduto.value, 'produtos').then(() => {
+    this.firebaseService.update(this.formEdicaoProduto.value, this.produtoSelecionado.id, 'produtos').then(() => {
 
       (<any>$('#editarProdutoModal')).modal('hide');
 
@@ -104,6 +104,12 @@ export class ProdutosComponent implements OnInit {
 
   selecionarProduto(produto: any) {
     this.produtoSelecionado = produto;
+    let keys = Object.keys(produto);
+    keys.forEach(x => {
+      if(x !== 'id') {
+        this.formEdicaoProduto.setValue({ [x]: produto[x] })
+      }
+    });
   }
 
   excluirProduto() {

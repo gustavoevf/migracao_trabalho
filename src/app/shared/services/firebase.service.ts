@@ -48,8 +48,8 @@ export class FirebaseService {
     return await deleteDoc(doc(this._fireStore, colecao + "/" + idDocumento));
   }
 
-  async update(documentoRef: any, documento: any) {
-    return await updateDoc(documentoRef, documento);
+  async update(documento: any, idDocumento: string, colecao: string) {
+    return await updateDoc(doc(this._fireStore, colecao + "/" + idDocumento), documento);
   }
 
 }

@@ -14,6 +14,10 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { ClientesComponent } from './clientes/clientes.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { VendasComponent } from './vendas/vendas.component';
+import { FooterComponent } from './shared/components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +26,11 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     UsuariosComponent,
     ProdutosComponent,
     SidebarComponent,
-    NavbarComponent
+    NavbarComponent,
+    ClientesComponent,
+    DashboardComponent,
+    VendasComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

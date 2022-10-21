@@ -1,0 +1,244 @@
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <app-sidebar></app-sidebar>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <app-navbar></app-navbar>
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <h1 class="h3 mb-2 text-gray-800">Vendas</h1>
+                <p class="mb-4">Cadastro de Vendas</p>
+
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <a href="#" data-toggle="modal" data-target="#cadastrarUsuarioModal"
+                            class="btn btn-success btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <span class="text">Nova Venda</span>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Cliente</th>
+                                        <th>Usuário (que registrou)</th>
+                                        <th>Valor Total</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>01/01/2022</td>
+                                        <td>Cliente A</td>
+                                        <td>Usuário 1</td>
+                                        <td>R$ 100,00</td>
+                                        <td>
+                                            <div>
+                                                <a href="#" class="btn btn-warning btn-circle btn-sm"
+                                                    data-toggle="modal" data-target="#editarUsuarioModal">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-danger btn-circle btn-sm" data-toggle="modal"
+                                                    data-target="#excluirUsuarioModal">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>02/01/2022</td>
+                                        <td>Cliente B</td>
+                                        <td>Usuário 2</td>
+                                        <td>R$ 80,00</td>
+                                        <td>
+                                            <div>
+                                                <a href="#" class="btn btn-warning btn-circle btn-sm"
+                                                    data-toggle="modal" data-target="#editarUsuarioModal">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-danger btn-circle btn-sm" data-toggle="modal"
+                                                    data-target="#excluirUsuarioModal">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>03/01/2022</td>
+                                        <td>Cliente C</td>
+                                        <td>Usuário 3</td>
+                                        <td>R$ 90,00</td>
+                                        <td>
+                                            <div>
+                                                <a href="#" class="btn btn-warning btn-circle btn-sm"
+                                                    data-toggle="modal" data-target="#editarUsuarioModal">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-danger btn-circle btn-sm" data-toggle="modal"
+                                                    data-target="#excluirUsuarioModal">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <app-footer></app-footer>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<div class="modal fade" id="cadastrarUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="cadastrarUsuarioModal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastrar Venda</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="m-3">
+                    <div class="mt-3">
+                        <label for="data" class="font-weight-bold">Data</label>
+                        <input type="date" id="data" class="form-control" placeholder="XX/XX/XXXX" name="data" required
+                            autofocus>
+                    </div>
+                    <div class="mt-3">
+                        <label for="inputProduto" class="font-weight-bold">Produto</label>
+                        <select class="form-control" id="inputProduto">
+                            <option>Produto 1</option>
+                            <option>Produto 2</option>
+                            <option>Produto 3</option>
+                            <option>Produto 4</option>
+                            <option>Produto 5</option>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label for="qtdProduto" class="font-weight-bold">Quantidade</label>
+                        <input class="form-control" type="number" id="qtdProduto" name="qtdProduto">
+                    </div>
+                    <div class="mt-3">
+                        <button id="addProduto" class="btn btn-secondary">Adicionar Produto</button>
+                    </div>
+                    <div class="mt-3">
+                        <label for="preco" class="font-weight-bold">Valor Total</label>
+                        <input id="preco" class="form-control" placeholder="R$100,00" name="celular" required autofocus>
+                    </div>
+                    <div class="mt-3">
+                        <label for="descricao" class="font-weight-bold">Descrição</label>
+                        <textarea id="password" name="password" class="form-control" placeholder="Senha"
+                            required></textarea>
+                    </div>
+                    <div class="d-flex d-flex align-items-center justify-content-center w-100 mt-2">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editarUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="editarUsuarioModal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Venda</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="m-3">
+                    <div class="mt-3">
+                        <label for="nome" class="font-weight-bold">Nome</label>
+                        <input id="nome" class="form-control" placeholder="Nome" name="nome" required autofocus>
+                    </div>
+                    <div class="mt-3">
+                        <label for="inputEmail" class="font-weight-bold">Tipo</label>
+                        <select class="form-control" id="tipo">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label for="preco" class="font-weight-bold">Preço</label>
+                        <input id="preco" class="form-control" placeholder="Preço" name="celular" required autofocus>
+                    </div>
+                    <div class="mt-3">
+                        <label for="descricao" class="font-weight-bold">Descrição</label>
+                        <textarea id="password" name="password" class="form-control" placeholder="Senha"
+                            required></textarea>
+                    </div>
+                    <div class="d-flex d-flex align-items-center justify-content-center w-100 mt-2">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="excluirUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="excluirUsuarioModal"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Excluir Venda</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Você têm certeza que deseja excluir o Venda <b>Teste</b>?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <a class="btn btn-danger" href="#">Excluir</a>
+            </div>
+        </div>
+    </div>
+</div>

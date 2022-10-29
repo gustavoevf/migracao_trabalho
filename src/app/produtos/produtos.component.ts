@@ -14,7 +14,7 @@ export class ProdutosComponent implements OnInit {
 
   formInclusaoProduto = this.formBuilder.group({
     nome: '',
-    categoria: '',
+    categoria: -1,
     preco: '',
     descricao: '',
     tags: '',

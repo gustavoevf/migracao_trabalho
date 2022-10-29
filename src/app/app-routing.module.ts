@@ -10,7 +10,8 @@ import { VendasComponent } from './vendas/vendas.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login'
+    redirectTo: '/login',
+    pathMatch: 'full'
   },
   {
     path: 'login',

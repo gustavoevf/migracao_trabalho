@@ -49,7 +49,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   onSubmitCreate(): void {
-    this.firebaseService.post({id: this.usuarioSelecionado.id, ...this.formInclusaoUsuario.value}, 'usuarios').then(() => {
+    this.firebaseService.post(this.formInclusaoUsuario.value, 'usuarios').then(() => {
 
       (<any>$('#cadastrarUsuarioModal')).modal('hide');
 

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { FirebaseApp } from '@angular/fire/app';
 import { Auth, user } from '@angular/fire/auth';
-import { doc, Firestore, getDocs, query, setDoc, deleteDoc, updateDoc, addDoc } from '@angular/fire/firestore';
+import { doc, Firestore, getDocs, query, setDoc, deleteDoc, updateDoc, addDoc, getDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { signInWithEmailAndPassword } from '@firebase/auth';
 import { collection } from '@firebase/firestore';
@@ -50,6 +50,14 @@ export class FirebaseService {
 
   async update(documento: any, idDocumento: string, colecao: string) {
     return await updateDoc(doc(this._fireStore, colecao + "/" + idDocumento), documento);
+  }
+
+  async doc(colecao: string) {
+    return await doc(this._fireStore, colecao);
+  }
+
+  async getById(colecao: string, idDocumento: string){
+    return await (await getDoc(doc(this._fireStore, colecao, idDocumento))).data();
   }
 
 }

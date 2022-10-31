@@ -39,6 +39,7 @@
                                         <th>Usuário (que registrou)</th>
                                         <th>Produto</th>
                                         <th>Valor Total</th>
+                                        <th>Descrição</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
@@ -49,6 +50,7 @@
                                         <td>{{venda.usuario}}</td>
                                         <td>{{venda.produto}}</td>
                                         <td>{{venda.valor}}</td>
+                                        <td>{{venda.descricao}}</td>
                                         <td>
                                             <div>
                                                 <a href="#" class="btn btn-warning btn-circle btn-sm"
@@ -104,36 +106,68 @@
                 (ngSubmit)="onSubmitCreate()">
                     <div class="mt-3">
                         <label for="data" class="font-weight-bold">Data</label>
-                        <input type="date" id="data" class="form-control" placeholder="XX/XX/XXXX" name="data" required
+                        <input type="date" id="data" class="form-control" placeholder="XX/XX/XXXX" name="data" 
+                        formControlName="data"
+                        required
                             autofocus>
                     </div>
                     <div class="mt-3">
+                        <label for="inputCliente" class="font-weight-bold">Cliente</label>
+                        <select name="inputCliente" class="form-control" id="selectCliente"
+                            formControlName="idCliente">
+                            <option disabled selected value="-1">Selecione um cliente</option>
+                            <option *ngFor="let cliente of clientes" [value]="cliente.id">{{cliente.nome}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label for="inputUsuario" class="font-weight-bold">Vendedor</label>
+                        <select name="inputCliente" class="form-control" id="selectVendedor"
+                            formControlName="idUsuario">
+                            <option disabled selected value="-1">Selecione um vendedor</option>
+                            <option *ngFor="let usuario of usuarios" [value]="usuario.id">{{usuario.nome}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mt-3">
                         <label for="inputProduto" class="font-weight-bold">Produto</label>
-                        <select name="inputProduto" class="form-control" id="selectCategorias"
-                            formControlName="produto">
+                        <select name="inputProduto" class="form-control" id="idProduto">
                             <option disabled selected value="-1">Selecione um produto</option>
                             <option *ngFor="let produto of produtos" [value]="produto.id">{{produto.nome}}
                             </option>
                         </select>
                     </div>
+                    
                     <div class="mt-3">
                         <label for="qtdVenda" class="font-weight-bold">Quantidade</label>
                         <input class="form-control" type="number" id="qtdVenda" name="qtdVenda">
                     </div>
-                    <div class="mt-3" id="listaProdutos"></div>
+                    <ng-container *ngIf="movVendasCreate.length > 0">
+                        <div class="mt-3 w-100 flex-column overflow-auto" id="listaProdutos">
+                            <div *ngFor="let movVenda of movVendasCreate; index as i;" class="d-flex align-center justify-content-between w-100">
+                                <div ><b>Produto: </b> {{movVenda.nomeProduto}} - <b>Quantidade: </b> {{movVenda.quantidade}}</div>
+                                <div style="cursor: pointer;" (click)="removerProdutoCreate(i)">x</div>
+                            </div>
+                            
+                        </div>
+                   </ng-container>
+                    
                     <div class="mt-3">
                         <div class="mt-3">
-                            <button id="addVenda" class="btn btn-secondary"
-                            (click)="adicionarProduto()">Adicionar Produto</button>
+                            <button id="addVenda" class="btn btn-secondary" type="button"
+                            (click)="adicionarProdutoCreate()">Adicionar Produto</button>
                         </div>
                     </div>
                     <div class="mt-3">
                         <label for="preco" class="font-weight-bold">Valor Venda</label>
-                        <input id="preco" class="form-control" placeholder="R$100,00" name="celular" required autofocus>
+                        <input id="preco" class="form-control" placeholder="R$100,00" name="celular" required 
+                        formControlName="valor"
+                        autofocus>
                     </div>
                     <div class="mt-3">
                         <label for="descricao" class="font-weight-bold">Descrição</label>
-                        <textarea id="password" name="password" class="form-control" placeholder="Senha"
+                        <textarea id="password" name="descricao" class="form-control" placeholder="Descrição"
+                        formControlName="descricao"
                             required></textarea>
                     </div>
                     <div class="d-flex d-flex align-items-center justify-content-end w-100 mt-2">
@@ -160,35 +194,83 @@
                 <form class="m-3" [formGroup]="formEdicaoVenda"
                 (ngSubmit)="onSubmitEdit()">
                     <div class="mt-3">
-                        <label for="nome" class="font-weight-bold">Nome</label>
-                        <input id="nome" class="form-control" placeholder="Nome" name="nome" required autofocus>
+                        <label for="data" class="font-weight-bold">Data</label>
+                        <input type="date" id="data" class="form-control" placeholder="XX/XX/XXXX" name="data" 
+                        formControlName="data"
+                        required
+                            autofocus
+                            [value]="vendaSelecionada?.data">
                     </div>
                     <div class="mt-3">
-                        <label for="inputEmail" class="font-weight-bold">Tipo</label>
-                        <select class="form-control" id="tipo">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                        <label for="inputCliente" class="font-weight-bold">Cliente</label>
+                        <select name="inputCliente" class="form-control" id="selectCliente"
+                            formControlName="idCliente">
+                            <option disabled selected value="-1">Selecione um cliente</option>
+                            <option *ngFor="let cliente of clientes" [value]="cliente.id"
+                            [selected]="cliente.id==vendaSelecionada?.idCliente">{{cliente.nome}}
+                            </option>
                         </select>
                     </div>
                     <div class="mt-3">
-                        <label for="preco" class="font-weight-bold">Preço</label>
-                        <input id="preco" class="form-control" placeholder="Preço" name="celular" required autofocus>
+                        <label for="inputUsuario" class="font-weight-bold">Vendedor</label>
+                        <select name="inputCliente" class="form-control" id="selectVendedor"
+                            formControlName="idUsuario">
+                            <option disabled selected value="-1">Selecione um vendedor</option>
+                            <option *ngFor="let usuario of usuarios" [value]="usuario.id"
+                            [selected]="usuario.id==vendaSelecionada?.idUsuario">{{usuario.nome}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label for="inputProduto" class="font-weight-bold">Produto</label>
+                        <select name="inputProduto" class="form-control" id="idProdutoEdit">
+                            <option disabled selected value="-1">Selecione um produto</option>
+                            <option *ngFor="let produto of produtos" [value]="produto.id"
+                            [selected]="produto.id==vendaSelecionada?.idProduto">{{produto.nome}}
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <label for="qtdVenda" class="font-weight-bold">Quantidade</label>
+                        <input class="form-control" type="number" id="qtdVenda" name="qtdVendaEdit">
+                    </div>
+                    <ng-container *ngIf="movVendasEdit.length > 0">
+                        <div class="mt-3 w-100 flex-column overflow-auto" id="listaProdutos">
+                            <div *ngFor="let movVenda of movVendasEdit; index as i;" class="d-flex align-center justify-content-between w-100">
+                                <div ><b>Produto: </b> {{movVenda.nomeProduto}} - <b>Quantidade: </b> {{movVenda.quantidadeProduto}}</div>
+                                <div style="cursor: pointer;" (click)="removerProdutoEdit(i)">x</div>
+                            </div>
+                            
+                        </div>
+                   </ng-container>
+                    
+                    <div class="mt-3">
+                        <div class="mt-3">
+                            <button id="addVenda" class="btn btn-secondary" type="button"
+                            (click)="adicionarProdutoEdit()">Adicionar Produto</button>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <label for="preco" class="font-weight-bold">Valor Venda</label>
+                        <input id="preco" class="form-control" placeholder="R$100,00" name="celular" required 
+                        formControlName="valor"
+                        autofocus
+                        [value]="vendaSelecionada?.valor">
                     </div>
                     <div class="mt-3">
                         <label for="descricao" class="font-weight-bold">Descrição</label>
-                        <textarea id="password" name="password" class="form-control" placeholder="Senha"
-                            required></textarea>
+                        <textarea id="password" name="descricao" class="form-control" placeholder="Descrição"
+                        formControlName="descricao"
+                            required
+                            [value]="vendaSelecionada?.descricao">
+                        </textarea>
                     </div>
-                    <div class="d-flex d-flex align-items-center justify-content-center w-100 mt-2">
+                    <div class="d-flex d-flex align-items-center justify-content-end w-100 mt-2">
+                        <button class="btn btn-secondary mr-1" type="button" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary">Salvar</button>
             </div>
         </div>
     </div>
@@ -205,10 +287,10 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">Você têm certeza que deseja excluir o Venda <b>Teste</b>?</div>
+            <div class="modal-body">Você têm certeza que deseja excluir essa Venda?</div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-                <a class="btn btn-danger" href="#">Excluir</a>
+                <button class="btn btn-danger" (click)="excluirVenda()">Excluir</button>
             </div>
         </div>
     </div>

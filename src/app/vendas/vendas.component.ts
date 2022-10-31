@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { getDoc } from '@angular/fire/firestore';
+import {
+  CollectionReference,
+  doc,
+  Firestore,
+  getDoc,
+  getFirestore,
+} from '@angular/fire/firestore';
 import { FormBuilder } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { FirebaseService } from '../shared/services/firebase.service';
@@ -11,24 +17,26 @@ import { FirebaseService } from '../shared/services/firebase.service';
 })
 export class VendasComponent implements OnInit {
   vendas: any[] = [];
+  movVendasCreate: any[] = [];
   clientes: any;
   usuarios: any;
   produtos: any;
-
+  movVendas: any[] = [];
+  movVendasEdit: any[] = [];
   formInclusaoVenda = this.formBuilder.group({
-    cliente: '',
+    idCliente: '-1',
     data: '',
-    usuario: '',
-    produto: '-1',
+    idUsuario: '-1',
     valor: '',
+    descricao: ''
   });
 
   formEdicaoVenda = this.formBuilder.group({
-    cliente: '',
+    idCliente: '',
     data: '',
-    usuario: '',
-    produto: '',
+    idUsuario: '',
     valor: '',
+    descricao: ''
   });
   vendaSelecionada: any;
 
@@ -72,32 +80,37 @@ export class VendasComponent implements OnInit {
         const data = doc.data();
         let nomeCliente = '';
         let nomeUsuario = '';
-        let nomeProduto = '';
-        console.log(data['data']);
-        getDoc(data['produto'])
+        this.firebaseService.getById('clientes', data['idCliente'])
           .then((r) => {
-            nomeProduto = r.data()['nome'];
+            nomeCliente = r['nome'];
           })
           .then(() => {
-            getDoc(data['cliente'])
-            .then((r) => {
-              nomeCliente = r.data()['nome'];
-            })
-            .then(() => {
-              getDoc(data['usuario'])
-                .then((r) => {
-                  return (nomeUsuario = r.data()['nome']);
-                })
-                .then(() => {
+            this.firebaseService.getById('usuarios', data['idUsuario'])
+              .then((r) => {
+                nomeUsuario = r['nome'];
+              })
+              .then(() => {
+                this.firebaseService.get('mov_vendas').then((res) => {
+                  let nomeProdutos = [];
+                  res.docs.forEach((docMov) => {
+                    if(docMov.data()['idVenda'] == doc.id){
+                      this.movVendas.push(docMov.data());
+                      this.produtos.map((e) => {
+                        if(e['id'] == docMov.data()['idProduto']){
+                          nomeProdutos.push(e['nome']);
+                        }
+                      })
+                    }
+                  })
                   this.vendas.push({
                     id,
                     ...data,
                     cliente: nomeCliente,
                     usuario: nomeUsuario,
-                    produto: nomeProduto,
+                    produto: nomeProdutos.toString(),
                   });
-                });
-            });
+                })
+              });
           });
       });
     });
@@ -107,32 +120,109 @@ export class VendasComponent implements OnInit {
     this.firebaseService.sair();
   }
 
-  adicionarProduto() {
-    this.firebaseService.sair();
+  adicionarProdutoCreate() {
+    const produtoId = (document.getElementById('idProduto') as HTMLSelectElement).value;
+    const quantidade = Number(
+      (document.getElementById('qtdVenda') as HTMLInputElement).value
+    );
+    if (produtoId != '-1' || quantidade || quantidade > 0) {
+      const produtoSelecionado = document.getElementById(
+        'idProduto'
+      ) as HTMLSelectElement;
+      const produtoNome =
+        produtoSelecionado.options[produtoSelecionado.selectedIndex].text;
+      this.movVendasCreate.push({
+        idProduto: produtoId,
+        nomeProduto: produtoNome,
+        quantidade: quantidade,
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Digite um produto e quantidade válidos!',
+      });
+    }
+  }
+
+  removerProdutoCreate(i: number) {
+    this.movVendasCreate.splice(i, 1);
+  }
+
+  adicionarProdutoEdit() {
+    const produtoId = (document.getElementById('idProdutoEdit') as HTMLInputElement).value;
+    const quantidade = Number(
+      (document.getElementById('qtdVendaEdit') as HTMLInputElement).value
+    );
+    if (produtoId != '-1' || quantidade || quantidade > 0) {
+      const produtoSelecionado = document.getElementById(
+        'idProdutoEdit'
+      ) as HTMLSelectElement;
+      const produtoNome =
+        produtoSelecionado.options[produtoSelecionado.selectedIndex].text;
+      this.movVendasEdit.push({
+        idProduto: produtoId,
+        nomeProduto: produtoNome,
+        quantidade: quantidade,
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Digite um produto e quantidade válidos!',
+      });
+    }
+  }
+
+  removerProdutoEdit(i: number) {
+    this.movVendasEdit.splice(i, 1);
   }
 
   onSubmitCreate(): void {
-    this.firebaseService
-      .post(
-        { id: this.vendaSelecionada.id, ...this.formInclusaoVenda.value },
-        'vendas'
-      )
-      .then(() => {
-        (<any>$('#cadastrarVendaModal')).modal('hide');
+    if (this.movVendasCreate.length > 0) {
+      this.firebaseService
+        .post(this.formInclusaoVenda.value, 'vendas')
+        .then((resVenda) => {
+          this.movVendasCreate.forEach((e) => {
+            this.firebaseService
+              .post(
+                {
+                  idProduto: e.idProduto,
+                  quantidadeProduto: e.quantidade,
+                  idVenda: resVenda.id,
+                },
+                'mov_vendas'
+              )
+              .then(() => {})
+              .catch((error) => {
+                console.log(error)
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Erro ao incluir produtos!',
+                });
+              });
+          });
 
-        Swal.fire({
-          icon: 'success',
-          title: 'Venda cadastrada com sucesso!',
+          (<any>$('#cadastrarVendaModal')).modal('hide');
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Venda cadastrada com sucesso!',
+          });
+          this.formInclusaoVenda.reset();
+          this.obterVendas();
+        })
+        .catch((error) => {
+          console.log(error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro ao cadastrar uma venda!',
+          });
         });
-        this.formInclusaoVenda.reset();
-        this.obterVendas();
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Erro ao cadastrar uma venda!',
-        });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Adicione produtos à venda!',
       });
+    }
   }
 
   onSubmitEdit(): void {
@@ -161,6 +251,17 @@ export class VendasComponent implements OnInit {
     this.vendaSelecionada = venda;
     const clone = (({ id, ...o }) => o)(venda);
     this.formEdicaoVenda.setValue(clone);
+    console.log(venda['id']);
+    console.log(this.movVendas);
+    this.movVendas.forEach(e => {
+      if(e['idVenda'] == venda['id']){
+        this.produtos.forEach(p => {
+          if(p['id'] == e['idProduto']){
+            this.movVendasEdit.push({...e, nomeProduto: p['nome']});
+          }
+        })
+      }
+    })
   }
 
   excluirVenda() {
